@@ -1,7 +1,6 @@
 ﻿using System;
 using LinearDataStructures;
 public enum EventType { CarArriving, LightChange, IntersectionClear };
-//public enum directions {"north", "east", "south", "west"};
 
 public class Simulation
 {
@@ -9,13 +8,31 @@ public class Simulation
     public  static  uint time;
     public static LinkedListPriorityQueue<Event> futureEvents;
     
+    const uint  GRID_WIDTH = 1;
+    const uint   GRID_HEIGHT = 1;
+
     public static void Main()
     {
-        Intersection i = new Intersection();
-        Intersection j = new Intersection();
+        
+        Intersection[,] intersections = new Intersection[ GRID_WIDTH, GRID_HEIGHT];
+
+        /*initialise intersections*/
+        for ( int x = 0 ; x < GRID_WIDTH ; x++ )
+            for (int y = 0 ; y < GRID_HEIGHT ; y++ )
+                intersections[ x, y] = new Intersection();
+
+        /*connect intersections from east to west*/
+                for ( int x = 0 ; x < GRID_WIDTH ; x++ )
+            for (int y = 0 ; y < GRID_HEIGHT ; y++ )
+                            {
+                new Road( intersections[x,y], intersections[(x+1)%GRID_WIDTH, y]);
+                                new Road( intersections[x,y], intersections[x, (y+1)%GRID_HEIGHT]);
+            }//end of connecting intersection x,y northwards and eastwards
+
         
 
     }//end of testing main
+
 
     public static void xMain()
     {
@@ -113,7 +130,8 @@ Console.WriteLine("Welcome to " + Console.Title + "\n");
                     Console.Write((int)time + ": "); //write time of current event to prepare for listing of events at this time
 
                     //process the event
-                    switch (EventType.CarArriving)
+                    EventType u = EventType.IntersectionClear;
+                    switch (u)
                     {
                         case EventType.CarArriving:
                             ce = e as CarArrivalEvent; //cast the event as a CarArrivalEvent to gain access to the direction it's on
@@ -162,12 +180,13 @@ numLightCycles++;
                     //Console.WriteLine(rowFormat, directions[i].Name, directions[i].NumCar, directions[i].TotalWaitTime / directions[i].NumCar); //data for each direction
 
                 //Console.WriteLine(rowFormat, "total", Direction.NumCars, Direction.TotalWaitTimes / Direction.NumCars); //total data
-                Console.WriteLine("");
+                //Console.WriteLine("");
         
                 do
                 {
                     Console.WriteLine("Press 'n' to stop simulating these light durations, anything else to continue> ");
                 } while (0 == (inputString = Console.ReadLine()).Length);
+                inputString = "";
             } while ('n' != inputString[0]);
         
             do

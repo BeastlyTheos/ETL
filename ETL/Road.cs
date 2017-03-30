@@ -6,7 +6,7 @@ public class Road
     uint length;
     uint numWaiting;
 
-    public Road(Intersection f, Intersection t, uint l)
+    public Road(Intersection f, Intersection t, uint l = 1)
     {
         from = f;
         to = t;
