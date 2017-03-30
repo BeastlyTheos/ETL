@@ -2,13 +2,13 @@
 {
     private uint time;
 
-
+    public abstract void actuate();
     public Event(uint time)
     {
         this.time = time;
     }
 
-    public double Time
+    public uint  Time
     { get { return this.time; } }
 
     public override string ToString()
@@ -27,21 +27,32 @@
 }//end of Event class
 
 
-public class CarArrivalEvent : Event
+public class  EndOfRoadEvent: Event
 {
     Road road;
 
     //constructor
-    public CarArrivalEvent(uint time, Road r): base(time)
+    public EndOfRoadEvent(uint time, Road r): base(time)
     {
         this.road = r;
     }
 
-    public int Road
-    { get { return Road; } }
-
+    public override void actuate()
+    { this.road.to.push(this.road); }
+    
     public override string ToString()
     {
         return base.ToString() + " from " + road;
     }
     }//end of CarArrivingEvent class
+
+class IntersectionClearEvent : Event
+{
+    Intersection i;
+    public IntersectionClearEvent( uint  t, Intersection i)
+        : base(t)
+    { this.i = i; }
+
+    public override void actuate()
+    { i.clearIntersection(); }
+    }//end IntersectionClearEvent

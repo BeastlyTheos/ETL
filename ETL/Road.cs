@@ -1,23 +1,30 @@
 ﻿
 public class Road
 {
-    public Intersection From { get; private set; }
-    public Intersection To { get; private set; }
+    public Intersection from { get; private set; }
+    public Intersection to { get; private set; }
     uint length;
     uint numWaiting;
+    bool hasGreen;
+    public  Road leadsTo { get; private  set; }
 
     public Road(Intersection f, Intersection t, uint l = 1)
     {
-        From = f;
-        To = t;
-         From.addOutgoingRoad(this);
-       To.addIncomingRoad(this);
+        from = f;
+        to = t;
+         from.addOutgoingRoad(this);
+       to.addIncomingRoad(this);
+       hasGreen = true;
+       leadsTo = null;
     }//end constructor 
 
     public void push()
     {
-        //Simulation.futureEvents.Add(new CarArrivalEvent(CarArrivalEvent, Simulation.time + this.length, this));
+        Simulation.futureEvents.Add(new EndOfRoadEvent(Simulation.time + this.length, this));
     }
+     
+    public void addWaitingCar()
+    {numWaiting++;}
 
     public void pop()
     { numWaiting--; }
