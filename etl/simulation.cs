@@ -113,7 +113,7 @@ Console.WriteLine("Welcome to " + Console.Title + "\n");
                     Console.Write((int)time + ": "); //write time of current event to prepare for listing of events at this time
 
                     //process the event
-                    switch (e.Type)
+                    switch (EventType.CarArriving)
                     {
                         case EventType.CarArriving:
                             ce = e as CarArrivalEvent; //cast the event as a CarArrivalEvent to gain access to the direction it's on

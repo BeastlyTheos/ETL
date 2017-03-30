@@ -1,28 +1,21 @@
-﻿public class  Event : System.IComparable
+﻿public abstract class Event : System.IComparable
 {
-    protected EventType type;
-            protected double time;
+    private uint time;
 
-    public Event(EventType type, double time)
+
+    public Event(uint time)
     {
-                this.type = type;
         this.time = time;
     }
-
-    public EventType Type
-    { get { return type; } }
 
     public double Time
     { get { return this.time; } }
 
-    public  override string ToString()
+    public override string ToString()
     {
-        return this.type + " at " + (int)this.time;
+        return this.GetType() + " at " + (int)this.time;
     }
 
-    public   void test(int x)
-    { x = 1; return; }
-    
     public int CompareTo(object obj)
     {
         Event other = obj as Event;
@@ -31,7 +24,7 @@
         else
             return other.time.CompareTo(this.time);
     }
-}
+}//end of Event class
 
 
 public class CarArrivalEvent : Event
@@ -39,8 +32,7 @@ public class CarArrivalEvent : Event
     Road road;
 
     //constructor
-    public CarArrivalEvent(EventType type, uint time, Road r)
-        : base(type, time)
+    public CarArrivalEvent(uint time, Road r): base(time)
     {
         this.road = r;
     }
@@ -52,6 +44,4 @@ public class CarArrivalEvent : Event
     {
         return base.ToString() + " from " + road;
     }
-    //public  override void test(int x)
-    //{ x = 8; return; }
-}//end of CarArrivingEvent class
+    }//end of CarArrivingEvent class
