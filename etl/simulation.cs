@@ -7,9 +7,9 @@ public class Simulation
     static Random randNum = new Random();
     public  static  uint time;
     public static LinkedListPriorityQueue<Event> futureEvents;
-    
-    const uint  GRID_WIDTH = 1;
-    const uint   GRID_HEIGHT = 1;
+
+    const uint GRID_WIDTH = 2;
+    const uint GRID_HEIGHT = 2;
 
     public static void Main()
     {
@@ -29,10 +29,19 @@ public class Simulation
                                 new Road( intersections[x,y], intersections[x, (y+1)%GRID_HEIGHT]);
             }//end of connecting intersection x,y northwards and eastwards
 
-        
 
+                printGrid(intersections);
+                Console.WriteLine("hello");
+                Console.Read();
     }//end of testing main
 
+    static  void printGrid(Intersection[,] i)
+    {//for( int x = 0; x < GRID_WIDTH ; x++)
+        //for(int y = 0 ; y < GRID_HEIGHT ; y++)
+        foreach (Intersection h in i)
+            Console.WriteLine(h.ToString());
+            
+    }//end printGrid
 
     public static void xMain()
     {

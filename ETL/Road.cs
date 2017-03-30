@@ -1,17 +1,17 @@
 ﻿
 public class Road
 {
-    Intersection from;
-    Intersection to;
+    public Intersection From { get; private set; }
+    public Intersection To { get; private set; }
     uint length;
     uint numWaiting;
 
     public Road(Intersection f, Intersection t, uint l = 1)
     {
-        from = f;
-        to = t;
-        from.addOutgoingRoad(this);
-        to.addIncomingRoad(this);
+        From = f;
+        To = t;
+         From.addOutgoingRoad(this);
+       To.addIncomingRoad(this);
     }//end constructor 
 
     public void push()
