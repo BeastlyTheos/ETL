@@ -1,18 +1,7 @@
-﻿/*cois 2020h assignment 2 part b
- * Theodore Cooke 0560425
- * 
- * class Event
- * holds type of event and time of occurance
- * 
- * class CarArrivalEvent : Event
- * adds direction as an int which corresponds to index of its associated direction object
- */
-
-
-public class Event : System.IComparable
+﻿public class  Event : System.IComparable
 {
     protected EventType type;
-    protected double time;
+            protected double time;
 
     public Event(EventType type, double time)
     {
@@ -47,21 +36,21 @@ public class Event : System.IComparable
 
 public class CarArrivalEvent : Event
 {
-    int dir;
+    Road road;
 
     //constructor
-    public CarArrivalEvent(EventType type, double time, int dir)
+    public CarArrivalEvent(EventType type, uint time, Road r)
         : base(type, time)
     {
-        this.dir = dir;
-            }
+        this.road = r;
+    }
 
-    public int Dir
-    { get { return dir; } }
+    public int Road
+    { get { return Road; } }
 
-    public  override string ToString()
+    public override string ToString()
     {
-        return base.ToString() + " from "+dir;
+        return base.ToString() + " from " + road;
     }
     //public  override void test(int x)
     //{ x = 8; return; }

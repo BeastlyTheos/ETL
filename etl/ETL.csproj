@@ -34,10 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="direction.cs" />
+    <Compile Include="Road.cs" />
+    <Compile Include="Intersection.cs" />
     <Compile Include="simulation.cs" />
     <Compile Include="Event.cs" />
     <Compile Include="linear data structures.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
