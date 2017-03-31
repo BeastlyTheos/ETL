@@ -1,3 +1,4 @@
+
 using System;
 
 namespace LinearDataStructures
@@ -65,6 +66,13 @@ namespace LinearDataStructures
                 return first.Item;
             else
                 return default(T);
+        }
+
+        public T pop()
+        {
+            T obj = this.Front();
+            this.Remove();
+            return obj;
         }
 
         public void MakeEmpty()

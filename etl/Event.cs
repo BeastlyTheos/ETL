@@ -1,19 +1,17 @@
 ﻿public abstract class Event : System.IComparable
 {
-    private uint time;
-
-    public abstract void actuate();
-    public Event(uint time)
+    public ulong time { get; private set; }
+    
+        public Event(ulong time)
     {
         this.time = time;
     }
 
-    public uint  Time
-    { get { return this.time; } }
+        public abstract void actuate();
 
-    public override string ToString()
+        public override string ToString()
     {
-        return this.GetType() + " at " + (int)this.time;
+        return this.GetType() + " at " +this.time;
     }
 
     public int CompareTo(object obj)
@@ -29,16 +27,15 @@
 
 public class  EndOfRoadEvent: Event
 {
-    Road road;
+    public Road road { get; private set; }
 
-    //constructor
-    public EndOfRoadEvent(uint time, Road r): base(time)
+        public EndOfRoadEvent(ulong time, Road r): base(time)
     {
         this.road = r;
     }
 
     public override void actuate()
-    { this.road.to.push(this.road); }
+  { this.road.to.push(this.road); }
     
     public override string ToString()
     {
@@ -49,7 +46,7 @@ public class  EndOfRoadEvent: Event
 class IntersectionClearEvent : Event
 {
     Intersection i;
-    public IntersectionClearEvent( uint  t, Intersection i)
+    public IntersectionClearEvent( ulong t, Intersection i)
         : base(t)
     { this.i = i; }
 

@@ -1,12 +1,11 @@
-﻿
-public class Road
+﻿public class Road
 {
-    public Intersection from { get; private set; }
+     public Intersection from { get; private set; }
     public Intersection to { get; private set; }
-    uint length;
+    ulong length;
     uint numWaiting;
-    bool hasGreen;
-    public  Road leadsTo { get; private  set; }
+    public  bool hasGreen;
+    
 
     public Road(Intersection f, Intersection t, uint l = 1)
     {
@@ -15,12 +14,11 @@ public class Road
          from.addOutgoingRoad(this);
        to.addIncomingRoad(this);
        hasGreen = true;
-       leadsTo = null;
-    }//end constructor 
+           }//end constructor 
 
     public void push()
     {
-        Simulation.futureEvents.Add(new EndOfRoadEvent(Simulation.time + this.length, this));
+        Simulation.futureEvents.Add(new EndOfRoadEvent((ulong) Simulation.time + this.length, this));
     }
      
     public void addWaitingCar()
