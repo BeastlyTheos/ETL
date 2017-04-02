@@ -1,8 +1,8 @@
 ﻿public abstract class Event : System.IComparable
 {
-    public ulong time { get; private set; }
+    public int  time { get; private set; }
     
-        public Event(ulong time)
+        public Event(int  time)
     {
         this.time = time;
     }
@@ -29,7 +29,7 @@ public class  EndOfRoadEvent: Event
 {
     public Road road { get; private set; }
 
-        public EndOfRoadEvent(ulong time, Road r): base(time)
+        public EndOfRoadEvent(int  time, Road r): base(time)
     {
         this.road = r;
     }
@@ -52,7 +52,7 @@ class IntersectionClearEvent : Event
 {
     public Intersection intersection;
 
-    public IntersectionClearEvent( ulong t, Intersection i)
+    public IntersectionClearEvent( int  t, Intersection i)
         : base(t)
     { this.intersection  = i; }
 
@@ -65,7 +65,7 @@ public class SwitchLightEvent : Event
 {
     public Intersection intersection;
 
-    public SwitchLightEvent(ulong time, Intersection i)
+    public SwitchLightEvent(int time, Intersection i)
         : base(time)
     { this.intersection = i; }
 }//end class SwitchLightEvent

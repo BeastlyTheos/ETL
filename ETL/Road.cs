@@ -2,7 +2,7 @@
 {
      public Intersection from { get; private set; }
     public Intersection to { get; private set; }
-    ulong length;
+    int  length;
     uint numWaiting;
     public  bool hasGreen;
     public Direction  dir;
@@ -40,7 +40,7 @@
 
     public void push()
     {
-        Simulation.futureEvents.Add(new EndOfRoadEvent((ulong) Simulation.time + this.length, this));
+        Simulation.futureEvents.Add(new EndOfRoadEvent( Simulation.time + this.length, this));
     }
      
     public void addWaitingCar()

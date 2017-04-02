@@ -5,18 +5,22 @@ public enum EventType { CarArriving, LightChange, IntersectionClear };
 public class Simulation
 {
     public static bool debug = true;
-    static ulong TIME_SCALE = 100;
-    static Random rand = new Random();
-    public static ulong time;
-    public static LinkedListPriorityQueue<Event> futureEvents;
+const       int  TIME_SCALE = 100;
+        const int LIGHT_DURATION = 30;
         const uint GRID_WIDTH = 2;
     const uint GRID_HEIGHT = 2;
-    const ulong LIGHT_DURATION = 30;
+
+    public static int time;
+    static Random rand = new Random(); 
+    public static LinkedListPriorityQueue<Event> futureEvents;
+
 
     public static void Main()
     {
-        futureEvents = new LinkedListPriorityQueue<Event>();
-        Intersection[,] intersections = new Intersection[GRID_WIDTH, GRID_HEIGHT];
+                Intersection[,] intersections = new Intersection[GRID_WIDTH, GRID_HEIGHT];
+                futureEvents = new LinkedListPriorityQueue<Event>();
+                Event e;
+                SwitchLightEvent sle;
 
         /*initialise intersections*/
         for (int x = 0; x < GRID_WIDTH; x++)
@@ -41,13 +45,9 @@ public class Simulation
                 i.fromNorth.hasGreen = i.fromSouth.hasGreen = false;
                 i.fromEast.hasGreen = i.fromWest.hasGreen = true;
 
-                futureEvents.Add( new SwitchLightEvent( (ulong)  rand.Next( 0, 2 * (int)  LIGHT_DURATION), i));
+                futureEvents.Add( new SwitchLightEvent( rand.Next( 0, 2 * LIGHT_DURATION), i));
             }//end of connecting intersection x,y northwards and eastwards
 
-        //futureEvents.Add(new EndOfRoadEvent(1, intersections[0, 0].leave[0]));
-        futureEvents.Add( new SwitchLightEvent( time, intersections[0, 0]));
-        Event e;
-        
                 while (!futureEvents.Empty())
         {
             e = futureEvents.pop();
@@ -57,10 +57,11 @@ public class Simulation
                     //Console.WriteLine("actuating {0} at {1}", e.ToString(), time);
 
             switch (e.GetType().ToString())
-            {case "SwitchLightEvent":
-                    SwitchLightEvent SLE = (SwitchLightEvent) e;
-                    SLE.intersection.switchLights();
-                    futureEvents.Add( new SwitchLightEvent( time+LIGHT_DURATION, SLE.intersection));
+            {
+                case "SwitchLightEvent":
+                    sle = (SwitchLightEvent) e;
+                    sle.intersection.switchLights();
+                    futureEvents.Add( new SwitchLightEvent( time+LIGHT_DURATION, sle.intersection));
                     break; //end SwitchLight
                 case "EndOfRoadEvent":
                     /*
