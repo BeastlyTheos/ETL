@@ -4,11 +4,14 @@ public enum EventType { CarArriving, LightChange, IntersectionClear };
 
 public class Simulation
 {
+    public static bool debug = true;
+    static ulong TIME_SCALE = 100;
     static Random rand = new Random();
     public static ulong time;
     public static LinkedListPriorityQueue<Event> futureEvents;
         const uint GRID_WIDTH = 2;
     const uint GRID_HEIGHT = 2;
+    const ulong LIGHT_DURATION = 30;
 
     public static void Main()
     {
@@ -24,10 +27,21 @@ public class Simulation
         for (int x = 0; x < GRID_WIDTH; x++)
             for (int y = 0; y < GRID_HEIGHT; y++)
             {
-                new Road(intersections[x, y], intersections[(x + 1) % GRID_WIDTH, y], Direction.northwards); //east
-                new Road(intersections[x, y], intersections[(x + 1) % GRID_WIDTH, y], Direction.eastwards); //west
-                new Road(intersections[x, y], intersections[x, (y + 1) % GRID_HEIGHT], Direction.southwards);//north
-            new Road(intersections[x, y], intersections[x, (y + 1) % GRID_HEIGHT], Direction.westwards);//south
+                Intersection i = intersections[x, y];
+                                                new Road(intersections[x, y], intersections[x, (y + 1) % GRID_HEIGHT], Direction.northwards);//north
+                new Road(intersections[x, y], intersections[(x + 1) % GRID_WIDTH, y], Direction.eastwards); //east
+                            new Road( intersections[x, (y +1) % GRID_HEIGHT], i, Direction.southwards);//south
+            new Road( intersections[(x +1) % GRID_WIDTH, y], i, Direction.westwards); //west
+            }///end  creating roads
+
+        for (int x = 0; x < GRID_WIDTH; x++)
+            for (int y = 0;  y < GRID_HEIGHT; y++)
+            {            //initialise lights
+                Intersection i = intersections[x, y];
+                i.fromNorth.hasGreen = i.fromSouth.hasGreen = false;
+                i.fromEast.hasGreen = i.fromWest.hasGreen = true;
+
+                futureEvents.Add( new SwitchLightEvent( (ulong)  rand.Next( 0, 2 * (int)  LIGHT_DURATION), i));
             }//end of connecting intersection x,y northwards and eastwards
 
         //futureEvents.Add(new EndOfRoadEvent(1, intersections[0, 0].leave[0]));
@@ -38,15 +52,15 @@ public class Simulation
         {
             e = futureEvents.pop();
             int r;
-            
-            time = e.time;
-            Console.WriteLine("actuating {0} at {1}", e.ToString(), time);
-            
+            //if (debug) System.Threading.Thread.Sleep( (int) ((e.time - time) * TIME_SCALE));
+            time = e.time; 
+                    //Console.WriteLine("actuating {0} at {1}", e.ToString(), time);
+
             switch (e.GetType().ToString())
             {case "SwitchLightEvent":
                     SwitchLightEvent SLE = (SwitchLightEvent) e;
                     SLE.intersection.switchLights();
-                    futureEvents.Add( new SwitchLightEvent( time+5, SLE.intersection));
+                    futureEvents.Add( new SwitchLightEvent( time+LIGHT_DURATION, SLE.intersection));
                     break; //end SwitchLight
                 case "EndOfRoadEvent":
                     /*

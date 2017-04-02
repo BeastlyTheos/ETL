@@ -54,7 +54,7 @@ public class Intersection
     }//end switch lights
 
     public void printLights()
-    {System.Console.WriteLine("Lights for {0} are {1], {2}, {3}, {4}\n", this.name.ToString(), fromNorth.hasGreen.ToString(), 
+    {System.Console.WriteLine("Lights for {0} are {1}, {2}, {3}, {4}\n", this.name.ToString(), fromNorth.hasGreen.ToString(), 
         fromEast.hasGreen.ToString(), 
         fromSouth.hasGreen.ToString(), fromWest.hasGreen.ToString());}
 
