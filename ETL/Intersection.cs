@@ -2,24 +2,32 @@
 
 public class Intersection
 {
-    public  List<Road> arrive;
-    public  List<Road> leave;
-    public int x { get; private set; }
-    public int y { get; private set; }
+    public  Road toNorth;
+    public  Road toEast;
+    public  Road toSouth;
+    public Road toWest;
+    public Road fromNorth;
+    public Road fromEast;
+    public Road fromSouth;
+    public Road fromWest;
+    
     public bool isClear { get; private set; }
         public string name { get; private set; }
-            static uint numIntersections = 0;
+        static uint numIntersections = 0;
 
-    public Intersection( int x, int y, string name = null)
-    {
-        arrive = new List<Road>(4);
-        leave = new List<Road>(4);
+    public Intersection( string name = null)
+    {numIntersections++;
+    this.name = null != name ? name : string.Format("int{0}", numIntersections); 
         isClear = true;
-        numIntersections++;
 
-        this.x = x;
-        this.y = y;
-        this.name = null!= name ? name : string.Format("int{0}", numIntersections);
+        toNorth = null;
+        toEast = null;
+        toSouth = null;
+        toWest = null;
+        fromNorth = null;
+        fromEast = null;
+        fromSouth = null;
+        fromWest = null;
                    }
 
     ~Intersection()
@@ -28,42 +36,37 @@ public class Intersection
     public override string ToString()
     {
         string s = this.name + " connects to: ";
-        foreach (Road r in leave)
+        /*foreach (Road r in leave)
             s += r.to.name + ", ";
         s += "\nconnects from: ";
                 foreach (Road r in arrive)
                     s += r.from.name + ", ";
-                return s;
+                */return s;
             }//end toString
 
-    public void addIncomingRoad(Road r)
+    public void switchLights()
     {
-        arrive.Add(r);
-                    }
+        fromNorth.hasGreen = fromNorth.hasGreen ? false : true;
+        fromEast.hasGreen = fromEast.hasGreen ? false: true;
+        fromSouth.hasGreen = fromSouth.hasGreen ? false: true;
+        fromWest.hasGreen = fromWest.hasGreen ? false : true;
+        printLights();
+    }//end switch lights
 
-    public void addOutgoingRoad(Road r)
-    { leave.Add(r); }
-    System.Random rand = new System.Random();
-    public void push(Road fromRoad)
+    public void printLights()
+    {System.Console.WriteLine("Lights for {0} are {1], {2}, {3}, {4}\n", this.name.ToString(), fromNorth.hasGreen.ToString(), 
+        fromEast.hasGreen.ToString(), 
+        fromSouth.hasGreen.ToString(), fromWest.hasGreen.ToString());}
+
+        public void push(Road fromRoad)
     {
         if (isClear)
         {
-            this.leave[ rand.Next( 0,4)].push( );
+            
             isClear = false;
                         Simulation.futureEvents.Add(new IntersectionClearEvent(Simulation.time + 2, this));
         }
         else
             fromRoad.addWaitingCar();
     }//end driveThrough
-
-    public void clearIntersection()
-    { isClear = true; 
-        for( int i = 0; i < arrive.Count ; i++)
-        if( arrive[i].hasGreen && ! arrive[i].isEmpty())
-        {arrive[i].pop();
-            leave[ rand.Next( 0, 3)].push();
-                        Simulation.futureEvents.Add(new IntersectionClearEvent(Simulation.time + 2, this));
-break;
-        }//end if has green
-        }//end clear
 }//end class Intersection

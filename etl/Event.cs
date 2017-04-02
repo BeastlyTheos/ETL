@@ -7,7 +7,7 @@
         this.time = time;
     }
 
-        public abstract void actuate();
+        //public abstract void actuate();
 
         public override string ToString()
     {
@@ -34,8 +34,13 @@ public class  EndOfRoadEvent: Event
         this.road = r;
     }
 
-    public override void actuate()
-  { this.road.to.push(this.road); }
+    /*public override void actuate()
+    {if ( this.road.to.isClear)
+    {//{this.road.to.r
+    }//end if isClear
+    }//end actuate 
+     * */
+
     
     public override string ToString()
     {
@@ -45,11 +50,22 @@ public class  EndOfRoadEvent: Event
 
 class IntersectionClearEvent : Event
 {
-    Intersection i;
+    public Intersection intersection;
+
     public IntersectionClearEvent( ulong t, Intersection i)
         : base(t)
-    { this.i = i; }
+    { this.intersection  = i; }
 
-    public override void actuate()
+    /*public override void actuate()
     { i.clearIntersection(); }
+     * */
     }//end IntersectionClearEvent
+
+public class SwitchLightEvent : Event
+{
+    public Intersection intersection;
+
+    public SwitchLightEvent(ulong time, Intersection i)
+        : base(time)
+    { this.intersection = i; }
+}//end class SwitchLightEvent

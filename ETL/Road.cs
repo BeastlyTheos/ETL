@@ -5,16 +5,38 @@
     ulong length;
     uint numWaiting;
     public  bool hasGreen;
+    public Direction  dir;
     
-
-    public Road(Intersection f, Intersection t, uint l = 1)
+     public  Road(Intersection f, Intersection t, Direction  d, uint l = 1)
     {
-        from = f;
+                 from = f;
         to = t;
-         from.addOutgoingRoad(this);
-       to.addIncomingRoad(this);
-       hasGreen = true;
-           }//end constructor 
+                        this.dir = d;
+         hasGreen = true;
+
+         if (Direction.northwards == dir)
+         {
+             from.toNorth = this;
+             to.fromSouth = this;
+         }
+         else if (Direction.eastwards == dir)
+         {
+             from.toEast = this;
+             to.fromWest = this;
+         }
+         else if (Direction.southwards == dir)
+         {
+             from.toSouth = this;
+             to.fromNorth = this;
+         }
+         else if (Direction.westwards == dir)
+         {
+             from.toWest = this;
+             to.fromEast = this;
+         }
+         else
+             throw new System.ArgumentException("invalid direction");
+                    }//end constructor 
 
     public void push()
     {
