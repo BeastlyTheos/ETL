@@ -15,7 +15,19 @@ const       int  TIME_SCALE = 100;
     static Random rand = new Random(); 
     public static LinkedListPriorityQueue<Event> futureEvents;
 
-        public static void Main()
+    public static void Main()
+    {
+        Direction d = new Direction(1, 0);
+        d.turnRight();
+        d.turnRight();
+        d.turnRight();
+Console.Write(         d.turnRight());
+        
+
+        Console.Write(d.ToString());
+        Console.Read();
+    }//end of testing dirs
+        public static void xMain()
     {
                 Intersection[,] intersections = new Intersection[GRID_WIDTH, GRID_HEIGHT];
                 futureEvents = new LinkedListPriorityQueue<Event>();
@@ -50,6 +62,7 @@ const       int  TIME_SCALE = 100;
                 futureEvents.Add( new SwitchLightEvent( rand.Next( 0, 2 * LIGHT_DURATION), i));
             }//end of connecting intersection x,y northwards and eastwards
 
+        futureEvents.Add(new EndOfRoadEvent(1, intersections[0, 0].fromWest));
                 while (!futureEvents.Empty())
         {
             e = futureEvents.pop();
@@ -63,6 +76,27 @@ const       int  TIME_SCALE = 100;
                     sle = (SwitchLightEvent) e;
                     sle.intersection.switchLights();
                     futureEvents.Add( new SwitchLightEvent( time+LIGHT_DURATION, sle.intersection));
+                    if (sle.intersection.fromNorth.hasGreen)
+                    {
+                        sle.intersection.fromNorth.pop();
+                        futureEvents.Add(new EndOfRoadEvent(time, sle.intersection.fromNorth));
+                    }
+                    else  if (sle.intersection.fromEast.hasGreen)
+                    {
+                        sle.intersection.fromEast.pop();
+                        futureEvents.Add(new EndOfRoadEvent(time, sle.intersection.fromEast));
+                    }
+                    if (sle.intersection.fromSouth.hasGreen)
+                    {
+                        sle.intersection.fromSouth.pop();
+                        futureEvents.Add(new EndOfRoadEvent(time, sle.intersection.fromNorth));
+                    }
+                    if (sle.intersection.fromWest.hasGreen)
+                    {
+                        sle.intersection.fromWest.pop();
+                        futureEvents.Add(new EndOfRoadEvent(time, sle.intersection.fromWest));
+                    }
+
                     break; //end SwitchLight
                 case "EndOfRoadEvent":
                                          eore = (EndOfRoadEvent)e;

@@ -69,5 +69,6 @@ public class Intersection
         this.toWest.push();
             else
         throw new System.Exception( string.Format( "invalid drive through direction from intersection {0} to road {1}", this.ToString(), d.ToString()));
+    System.Console.WriteLine("driving through {0} to {1}", this, d);
         }//end drive through
 }//end class Intersection
