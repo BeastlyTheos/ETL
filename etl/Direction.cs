@@ -18,17 +18,23 @@
                     }//end constructor 
 
         public Direction inverseDirection()
-        { return new Direction(-1 * this.x, -1 * this.y); }
+        {
+            this.x *= -1;
+            this.y *= -1;
+            return this;
+        }
 
-public void turnLeft()
+public Direction turnLeft()
 {//use arithmetic equivalent to a rotation matrix
     this.x = 0 * this.x + -1 * this.y;
     this.y = 1 * this.x + 0 * this.y;
+    return this;
 }//end turnLeft
 
-        public void   turnRight()
+        public Direction   turnRight()
 {//use arithmetic equivalent to a rotation matrix
     this.x = 0 * this.x + 1 * this.y;
     this.y = -1 * this.x + 0 * this.y;
+    return this;
 }//end turnRight
    }//end class Direction

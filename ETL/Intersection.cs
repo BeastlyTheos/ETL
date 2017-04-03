@@ -11,7 +11,7 @@ public class Intersection
     public Road fromSouth;
     public Road fromWest;
     
-    public bool isClear { get; private set; }
+    public bool isClear;
         public string name { get; private set; }
         static uint numIntersections = 0;
 
@@ -50,7 +50,7 @@ public class Intersection
         fromEast.hasGreen = fromEast.hasGreen ? false: true;
         fromSouth.hasGreen = fromSouth.hasGreen ? false: true;
         fromWest.hasGreen = fromWest.hasGreen ? false : true;
-        printLights();
+                //printLights();
     }//end switch lights
 
     public void printLights()
@@ -58,15 +58,16 @@ public class Intersection
         fromEast.hasGreen.ToString(), 
         fromSouth.hasGreen.ToString(), fromWest.hasGreen.ToString());}
 
-        public void push(Road fromRoad)
-    {
-        if (isClear)
-        {
-            
-            isClear = false;
-                        Simulation.futureEvents.Add(new IntersectionClearEvent(Simulation.time + 2, this));
-        }
-        else
-            fromRoad.addWaitingCar();
-    }//end driveThrough
+        public void driveThrough( Direction d )
+    {if ( Direction.northwards == d)
+        this.toNorth.push();
+            else if ( Direction.eastwards == d )
+        this.toEast.push();
+            else if ( Direction.southwards == d )
+        this.toSouth.push();
+            else if ( Direction.westwards == d )
+        this.toWest.push();
+            else
+        throw new System.Exception( string.Format( "invalid drive through direction from intersection {0} to road {1}", this.ToString(), d.ToString()));
+        }//end drive through
 }//end class Intersection

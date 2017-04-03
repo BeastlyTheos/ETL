@@ -7,6 +7,7 @@ public class Simulation
     public static bool debug = true;
 const       int  TIME_SCALE = 100;
         const int LIGHT_DURATION = 30;
+        public  const int CLEARING_TIME = 2;
         const uint GRID_WIDTH = 2;
     const uint GRID_HEIGHT = 2;
 
@@ -14,13 +15,14 @@ const       int  TIME_SCALE = 100;
     static Random rand = new Random(); 
     public static LinkedListPriorityQueue<Event> futureEvents;
 
-
-    public static void Main()
+        public static void Main()
     {
                 Intersection[,] intersections = new Intersection[GRID_WIDTH, GRID_HEIGHT];
                 futureEvents = new LinkedListPriorityQueue<Event>();
                 Event e;
                 SwitchLightEvent sle;
+            EndOfRoadEvent eore;
+            double r;
 
         /*initialise intersections*/
         for (int x = 0; x < GRID_WIDTH; x++)
@@ -51,8 +53,7 @@ const       int  TIME_SCALE = 100;
                 while (!futureEvents.Empty())
         {
             e = futureEvents.pop();
-            int r;
-            //if (debug) System.Threading.Thread.Sleep( (int) ((e.time - time) * TIME_SCALE));
+                        //if (debug) System.Threading.Thread.Sleep( (int) ((e.time - time) * TIME_SCALE));
             time = e.time; 
                     //Console.WriteLine("actuating {0} at {1}", e.ToString(), time);
 
@@ -64,24 +65,24 @@ const       int  TIME_SCALE = 100;
                     futureEvents.Add( new SwitchLightEvent( time+LIGHT_DURATION, sle.intersection));
                     break; //end SwitchLight
                 case "EndOfRoadEvent":
-                    /*
-                    EndOfRoadEvent EOR = (EndOfRoadEvent)e;
-                    if (EOR.road.to.isClear && EOR.road.hasGreen)
-                    {EOR.road.pop()
-                        EOR.road.to.isClear = false;
-                        futureEvents.Add(new IntersectionClearEvent( EOR.road.to,  LIGHT_DURATION));
-                        r = rand.NextDouble();
+                                         eore = (EndOfRoadEvent)e;
+                    if (eore.road.to.isClear && eore.road.hasGreen)
+                    {
+                        eore.road.pop();
+                        eore.road.to.isClear = false;
+                        futureEvents.Add(new IntersectionClearEvent( time+CLEARING_TIME,  eore.road.to));
+
+                        r = rand.Next();
                         if (0.7 > r)
-                                                    EOR.road.to.driveThrough(EOR.road.dir);
+                                                    eore.road.to.driveThrough(eore.road.dir);
                         else if ( 0.85 > r)
-                        EOR.road.to.driveThrough(EOR.road.dir.turnLeft());
+                        eore.road.to.driveThrough(eore.road.dir.turnLeft());
                         else
-                            EOR.road.to.driveThrough(EOR.road.dir.turnRight());
+                            eore.road.to.driveThrough(eore.road.dir.turnRight());
                     }//end if intersection is clear
                     else
-                        EOR.road.addWaitingCar();
-                    */
-                    break;
+                        eore.road.addWaitingCar();
+                                        break;
                     case "IntersectionClearEvent":
                     /*IntersectionClearEvent ICE = (IntersectionClearEvent)e;
                     ICE.intersection.isClear = true;
