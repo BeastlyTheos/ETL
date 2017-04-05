@@ -28,10 +28,12 @@
 public class  EndOfRoadEvent: Event
 {
     public Road road { get; private set; }
+    public Vehicle vehicle;
 
-        public EndOfRoadEvent(int  time, Road r): base(time)
+        public EndOfRoadEvent(int  time, Road r, Vehicle v): base(time)
     {
         this.road = r;
+        this.vehicle = v;
     }
 
     /*public override void actuate()

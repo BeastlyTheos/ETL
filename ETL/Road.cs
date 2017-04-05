@@ -1,55 +1,44 @@
 ﻿public class Road
 {
-     public Intersection from { get; private set; }
+         public Intersection from { get; private set; }
     public Intersection to { get; private set; }
+    public int dir;
     int  length;
-    uint numWaiting;
-    public  bool hasGreen;
-    public Direction  dir;
-    
-     public  Road(Intersection f, Intersection t, Direction  d, uint l = 1)
-    {
-                 from = f;
-        to = t;
+
+    public bool hasGreen;
+    public  LinearDataStructures.LinkedQueue<Vehicle> waitingVehicles;
+
+     public  Road(Intersection f, Intersection t, int d, int l = Simulation.ROAD_LENGTH)
+    {if ( 4 <= d)
+        throw new System.ArgumentException("invalid direction");
+
+                 from = f; //connect road to intersection 
+        to = t; //connect road to intersection
                         this.dir = d;
+                        this.length = l;
+
+                        waitingVehicles = new LinearDataStructures.LinkedQueue<Vehicle>();
          hasGreen = true;
 
-         if (Direction.northwards == dir)
-         {
-             from.toNorth = this;
-             to.fromSouth = this;
-         }
-         else if (Direction.eastwards == dir)
-         {
-             from.toEast = this;
-             to.fromWest = this;
-         }
-         else if (Direction.southwards == dir)
-         {
-             from.toSouth = this;
-             to.fromNorth = this;
-         }
-         else if (Direction.westwards == dir)
-         {
-             from.toWest = this;
-             to.fromEast = this;
-         }
-         else
-             throw new System.ArgumentException("invalid direction");
-                    }//end constructor 
+         //connect intersections to road
+         from.outgoing[this.dir] = this;
+         to.incoming[ (this.dir +2) %4] = this;
+                                 }//end constructor 
 
-    public void push()
-    {
-        Simulation.futureEvents.Add(new EndOfRoadEvent( Simulation.time + this.length, this));
-    }
-     
-    public void addWaitingCar()
-    {numWaiting++;}
+     public bool drive()
+     {
+         if (this.waitingVehicles.Empty())
+                      return false;
 
-    public void pop()
-    { numWaiting--; }
+         Vehicle v = waitingVehicles.pop();
+         int  d = v.getDirection( (int)  this.dir);
+         Road r = this.to.outgoing[ d];
+         Simulation.futureEvents.Add( new EndOfRoadEvent( Simulation.time + r.length, r, v));
+         this.to.block(Simulation.CLEARING_TIME);
+         return true;
+     }
 
-    public bool isEmpty()
-    { return 0 == numWaiting; }
+     public bool isEmpty()
+     { return waitingVehicles.Empty(); }
 }//end class Road
 

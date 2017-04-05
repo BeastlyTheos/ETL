@@ -1,7 +1,9 @@
 ﻿  using System;
 
  public class Direction
-    {public static  Direction  northwards = new Direction( 0, 1);
+    {
+     public int t;
+          public static  Direction  northwards = new Direction( 0, 1);
      public static Direction  eastwards = new Direction( 1, 0);
      public static Direction  southwards = new Direction( 0, -1);
      public static Direction  westwards = new Direction( -1, 0);
@@ -10,12 +12,12 @@
         public  int  y{get; private set;}
 
         public Direction( int x, int  y)
-        {
-            if ((1 == Math.Abs(x) || 1 == Math.Abs(y)) && (0 == x || 0 == y)) //if either value is +-1 and the other is 0
+        {if ((1 == Math.Abs(x) || 1 == Math.Abs(y)) && (0 == x || 0 == y)) //if either value is +-1 and the other is 0
             { this.x = x; this.y = y; }
             else
             { this.x = 5; this.y = 5; }
                 //throw new ArgumentException(string.Format("Direction initialised with invalid coordinates [ %d, %d]", x, y)); 
+      this.t = 8;      
                     }//end constructor 
 
         public override string ToString()

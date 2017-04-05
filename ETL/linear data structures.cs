@@ -1,4 +1,3 @@
-
 using System;
 
 namespace LinearDataStructures
@@ -59,6 +58,22 @@ namespace LinearDataStructures
                 numItems--;
             }
         }
+
+        public void removeItems(T i)
+        {
+            if ( 0 !=  numItems )
+            {
+                Node n = first;
+                while ( null != n )
+                {
+                    if (i.Equals(n.Item))
+                    {
+                        n = n.Next;
+                        numItems--;
+                    }//end deleting
+                }//end while
+            }//end if not empty
+                    }//end remove items
 
         public T Front()
         {
