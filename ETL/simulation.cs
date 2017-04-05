@@ -10,8 +10,8 @@ public class Simulation
         public const int YELLOW_LIGHT_DURATION = 1;
         public  const int CLEARING_TIME = 3;
         public const int ROAD_LENGTH = 4;
-        const uint GRID_WIDTH = 1;
-        const uint GRID_HEIGHT = 1;
+        const uint GRID_WIDTH = 3;
+        const uint GRID_HEIGHT = 3;
 
     public static int time;
     public  static Random rand = new Random(); 
@@ -49,17 +49,18 @@ public class Simulation
             for (int y = 0;  y < GRID_HEIGHT; y++)
             {//initialise lights
                 Intersection i = intersections[x, y];
-                Console.WriteLine("initialising lights for intersection {0}", i.name);
-                i.incoming[(int)direction.north].hasGreen = true;
+
+                                i.incoming[(int)direction.north].hasGreen = true;
                 i.incoming[(int)direction.south].hasGreen = true;
                                     i.incoming[ (int)    direction.east].hasGreen  = true;
                                     i.incoming[ (int)  direction.west].hasGreen = true;
-                
-                futureEvents.Add( new SwitchLightEvent( rand.Next( 0, 2 * LIGHT_DURATION), i));
-                            }//end of connecting intersection x,y northwards and eastwards
 
-        Console.WriteLine("initialised intersections");
-        futureEvents.Add(new EndOfRoadEvent(1, intersections[0, 0].incoming[2], new Vehicle()));
+                                    futureEvents.Add(new SwitchLightEvent(rand.Next(0, 2 * LIGHT_DURATION), i));
+                                    for (int j = 0; j < 4; j++)
+                                        futureEvents.Add(new EndOfRoadEvent(0, i.incoming[j], new Vehicle()));
+                                            }//end of connecting intersection x,y northwards and eastwards
+
+
             
                 while ( (debug && time < 30) && !futureEvents.Empty())
         {
@@ -95,8 +96,7 @@ public class Simulation
                                                                 for (int i = 0; i < 4 && !hasDriven; i++)
                                                                     if (ICE.intersection.incoming[i].hasGreen && !ICE.intersection.incoming[i].waitingVehicles.Empty())
                                                                     {
-                                                                        Console.WriteLine("driving {0}", i);
-                                                                        ICE.intersection.incoming[i].drive();
+                                                                                                                                                ICE.intersection.incoming[i].drive();
                                                                         hasDriven = true;
                                                                     }
                                                                 if (hasDriven)

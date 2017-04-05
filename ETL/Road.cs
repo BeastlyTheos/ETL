@@ -36,7 +36,8 @@
          Vehicle v = waitingVehicles.pop();
          int  d = v.getDirection( (int)  this.dir);
                   Road r = this.to.outgoing[ d];
-         System.Console.WriteLine("coming from {0}, turning {1}, to leave {2}", (direction) this.dir, (direction) d, (direction) r.dir);
+         //System.Console.WriteLine("coming from {0}, to intersection {1}, and turning {2}, to leave {3} to {4}", 
+             //(direction) ((this.dir+2) %4), this.to.name, (direction) d, (direction) r.dir, r.to.name);
          Simulation.futureEvents.Add( new EndOfRoadEvent( Simulation.time + r.length, r, v));
          this.to.block(Simulation.CLEARING_TIME);
          return true;
