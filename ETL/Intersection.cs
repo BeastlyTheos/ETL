@@ -1,4 +1,4 @@
-﻿
+﻿using System;
 using System.Collections.Generic;
 
 public class Intersection
@@ -6,14 +6,14 @@ public class Intersection
     public Road[] outgoing;
     public Road[] incoming;
 
-    public bool isClear;
+     private   int numBlocking;
         public string name { get; private set; }
         static uint numIntersections = 0;
 
     public Intersection( string name = null)
     {numIntersections++;
-    this.name = null != name ? name : string.Format("int{0}", numIntersections); 
-        isClear = true;
+    this.name = null != name ? name : string.Format("int{0}", numIntersections);
+    numBlocking = 0;
 
         outgoing = new Road[4];
         incoming = new Road[4];
@@ -25,7 +25,15 @@ public class Intersection
     public override string ToString()
     {
         return this.name;}
-                    
+
+    public void sanityCheck()
+    {
+        for (int i = 0; i < 4 ; i++)
+            Console.WriteLine("Road from {0} thinks its going {1}", (direction)i, (direction)  incoming[i].dir);
+        for (int i = 0; i < 4 ; i++)
+            Console.WriteLine("Road to {0} thinks its going {1}", (direction)i, (direction) outgoing[i].dir);
+        }//end sanity check
+
     public void switchLights()
     {
         foreach (Road r in this.incoming)
@@ -41,7 +49,21 @@ public class Intersection
 
     public void block(int time)
     {
-        this.isClear = false;
+        numBlocking++;
         Simulation.futureEvents.Add(new IntersectionClearEvent(Simulation.time + time, this));
-    }
+    }//end block
+
+    public void unblock()
+    {
+        numBlocking--;
+        if (0 > numBlocking)
+            throw new System.Exception("Excessive clearing: numBlocking for intersection " + this.name + " is negative!");
+            }//end unblock
+
+    public bool isClear()
+    {
+        if (0 > numBlocking)
+            throw new System.Exception("Excessive clearing: numBlocking for intersection "+this.name+" is negative!");
+        return 0 == numBlocking;
+    }//end isClear
 }//end class Intersection
