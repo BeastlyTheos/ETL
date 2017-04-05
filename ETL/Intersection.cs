@@ -37,14 +37,14 @@ public class Intersection
     public void switchLights()
     {
         foreach (Road r in this.incoming)
-            r.hasGreen = r.hasGreen ? false : true;
+            r.HasGreen = r.HasGreen ? false : true;
                 printLights();
     }//end switch lights
 
     public void printLights()
     {
         System.Console.WriteLine("Lights for {0} are {1}, {2}, {3}, {4}\n", this.name.ToString(), 
-            incoming[0].hasGreen, incoming[1].hasGreen, incoming[2 ].hasGreen, incoming[3].hasGreen);
+            incoming[0].HasGreen, incoming[1].HasGreen, incoming[2 ].HasGreen, incoming[3].HasGreen);
                }
 
     public void block(int time)

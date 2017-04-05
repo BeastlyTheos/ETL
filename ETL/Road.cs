@@ -1,12 +1,18 @@
 ﻿public class Road
 {
+
+    public static int numSwitches = 0;
+    public static int numTrafficJams = 0;
+
          public Intersection from { get; private set; }
     public Intersection to { get; private set; }
     public int dir;
     int  length;
 
-    public bool hasGreen;
     public  LinearDataStructures.LinkedQueue<Vehicle> waitingVehicles;
+    private bool hasGreen;
+        private bool wasEmptiedThisCycle;
+
 
      public  Road(Intersection f, Intersection t, int d, int l = Simulation.ROAD_LENGTH)
     {if ( 4 <= d)
@@ -19,6 +25,7 @@
 
                         waitingVehicles = new LinearDataStructures.LinkedQueue<Vehicle>();
          hasGreen = true;
+         wasEmptiedThisCycle = true;
 
          //connect intersections to road
          from.outgoing[this.dir] = this;
@@ -28,7 +35,22 @@
      public override string ToString()
      { return string.Format("road{0}{1}", from.name, to.name);}
 
-     public bool drive()
+     public bool     HasGreen
+     {
+         get { return hasGreen; }
+                  set {numSwitches++;
+             if ( hasGreen && ! value && ! wasEmptiedThisCycle ) // if is being switched to red, and there are still cars waiting
+                 numTrafficJams++;
+                                         else if ( ! hasGreen && value ) //if the light is being turned green
+                     if ( 0 == waitingVehicles.Size() )
+                         wasEmptiedThisCycle = true;
+                             else
+                         wasEmptiedThisCycle = false;
+             hasGreen = value;
+         }
+     }//end HasGreen property
+    
+                         public bool drive()
      {
          if (this.waitingVehicles.Empty())
                       return false;

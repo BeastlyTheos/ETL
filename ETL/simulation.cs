@@ -50,10 +50,10 @@ public class Simulation
             {//initialise lights
                 Intersection i = intersections[x, y];
 
-                                i.incoming[(int)direction.north].hasGreen = true;
-                i.incoming[(int)direction.south].hasGreen = true;
-                                    i.incoming[ (int)    direction.east].hasGreen  = true;
-                                    i.incoming[ (int)  direction.west].hasGreen = true;
+                                i.incoming[(int)direction.north].HasGreen = true;
+                i.incoming[(int)direction.south].HasGreen = true;
+                                    i.incoming[ (int)    direction.east].HasGreen = true;
+                                    i.incoming[ (int)  direction.west].HasGreen = true;
 
                                     futureEvents.Add(new SwitchLightEvent(rand.Next(0, 2 * LIGHT_DURATION), i));
                                     for (int j = 0; j < 4; j++)
@@ -80,8 +80,8 @@ public class Simulation
                                     case "EndOfRoadEvent":
                                          eore = (EndOfRoadEvent)e;
                     eore.road.waitingVehicles.Add( eore.vehicle);
-                    Console.WriteLine("road is {0} clear, with a {1} light",  eore.road.to.isClear()? "": "not", eore.road.hasGreen? "green": "red");
-                    if (eore.road.to.isClear() && eore.road.hasGreen)
+                    Console.WriteLine("road is {0} clear, with a {1} light",  eore.road.to.isClear()? "": "not", eore.road.HasGreen? "green": "red");
+                    if (eore.road.to.isClear() && eore.road.HasGreen)
                     {
                                                 eore.road.drive();
                     }
@@ -94,7 +94,7 @@ public class Simulation
                                                             {//cycle through incoming roads, looking for a car to drive
                                                                 hasDriven = false;
                                                                 for (int i = 0; i < 4 && !hasDriven; i++)
-                                                                    if (ICE.intersection.incoming[i].hasGreen && !ICE.intersection.incoming[i].waitingVehicles.Empty())
+                                                                    if (ICE.intersection.incoming[i].HasGreen && !ICE.intersection.incoming[i].waitingVehicles.Empty())
                                                                     {
                                                                                                                                                 ICE.intersection.incoming[i].drive();
                                                                         hasDriven = true;
