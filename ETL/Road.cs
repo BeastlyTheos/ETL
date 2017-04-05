@@ -25,6 +25,9 @@
          to.incoming[ (this.dir +2) %4] = this;
                                  }//end constructor 
 
+     public override string ToString()
+     { return string.Format("road{0}{1}", from.name, to.name);}
+
      public bool drive()
      {
          if (this.waitingVehicles.Empty())

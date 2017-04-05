@@ -10,8 +10,8 @@ const       int  TIME_SCALE = 1;
         public const int YELLOW_LIGHT_DURATION = 5;
         public  const int CLEARING_TIME = 2;
         public const int ROAD_LENGTH = 4;
-        const uint GRID_WIDTH = 3;
-        const uint GRID_HEIGHT = 3;
+        const uint GRID_WIDTH = 1;
+        const uint GRID_HEIGHT = 1;
 
     public static int time;
     public  static Random rand = new Random(); 
@@ -24,8 +24,8 @@ const       int  TIME_SCALE = 1;
                 Event e;
                 SwitchLightEvent sle;
             EndOfRoadEvent eore;
-            double r;
-            bool hasDriven;
+            double r = 0.0;
+                        bool hasDriven = r == 0 ? true : false;
 
         /*initialise intersections*/
         for (int x = 0; x < GRID_WIDTH; x++)
@@ -40,32 +40,32 @@ const       int  TIME_SCALE = 1;
 
                                                 new Road( i, intersections[x, (y + 1) % GRID_HEIGHT], (int) direction.north);//north
                 new Road( i, intersections[(x + 1) % GRID_WIDTH, y], (int) direction.east); //east
-                            new Road( intersections[x, (y +1) % GRID_HEIGHT], i, (int) direction.south);//south
-            new Road( intersections[(x +1) % GRID_WIDTH, y], i, (int) direction.south); //west
+                                            new Road( intersections[x, (y +1) % GRID_HEIGHT], i, (int) direction.south);//south
+            new Road( intersections[(x +1) % GRID_WIDTH, y], i, (int) direction.west); //west
             }///end  creating roads
-
+        
         for (int x = 0; x < GRID_WIDTH; x++)
             for (int y = 0;  y < GRID_HEIGHT; y++)
             {//initialise lights
                 Intersection i = intersections[x, y];
-
-                i.incoming[ (int) direction.north].hasGreen = i.incoming[ (int) direction.south].hasGreen = false;
-                i.incoming[ (int)    direction.east].hasGreen = i.incoming[ (int)  direction.west].hasGreen = true;
+                Console.WriteLine("initialising lights for intersection {0}", i.name);
+                i.incoming[(int)direction.north].hasGreen = false;
+                i.incoming[(int)direction.south].hasGreen = false;
+                                    i.incoming[ (int)    direction.east].hasGreen  = true;
+                                    i.incoming[ (int)  direction.west].hasGreen = true;
                 
                 futureEvents.Add( new SwitchLightEvent( rand.Next( 0, 2 * LIGHT_DURATION), i));
             }//end of connecting intersection x,y northwards and eastwards
 
+        Console.WriteLine("initialised intersections");
         //futureEvents.Add(new EndOfRoadEvent(1, intersections[0, 0].fromWest));
 
                 while (!futureEvents.Empty())
         {
             e = futureEvents.pop();
-                        //if (debug) System.Threading.Thread.Sleep( (int) ((e.time - time) * TIME_SCALE));
+                        if (debug) System.Threading.Thread.Sleep( (int) ((e.time - time) * TIME_SCALE));
             time = e.time;
-
-                        if (! debug && e.GetType().ToString() == "SwitchLightEvent")
-                continue;
-                    Console.WriteLine("actuating {0} at {1}", e.GetType().ToString(), time);
+                        Console.WriteLine("actuating {0} at {1}", e.GetType().ToString(), time);
 
             switch (e.GetType().ToString())
             {
@@ -104,8 +104,7 @@ const       int  TIME_SCALE = 1;
                                         break;
                 default:
                     throw new  System.NotImplementedException("no implementation for event "+e.GetType());
-                    break;
-            }//end switch 
+                                }//end switch 
         }//end while there is a future event
 
                 Console.WriteLine("clearances are {0}, {1}, and {2}", intersections[0, 0].isClear, intersections[1, 0].name, intersections[2, 0].name);
@@ -115,10 +114,28 @@ const       int  TIME_SCALE = 1;
     }//end of Main
 
         static void printGrid(Intersection[,] i)
-    {//for( int x = 0; x < GRID_WIDTH ; x++)
-        //for(int y = 0 ; y < GRID_HEIGHT ; y++)
-        foreach (Intersection h in i)
-            Console.WriteLine(h.ToString());
-
+        {
+            int counter = 0;
+            Console.WriteLine("printing {0} {1} intersections", i.GetLength(0), i.GetLength(1));
+            for (int x = 0; x < GRID_WIDTH; x++)
+                for (int y = 0; y < GRID_HEIGHT; y++)
+                                            if (null == i)
+                            Console.WriteLine("{0}, {1} is null", x, y);
+            else
+            Console.WriteLine("{0}, {1}, is {3} {2}",x,y, i[x,y].ToString(), ++counter);
     }//end printGrid
+
+        static void printRoads(Intersection[,] i)
+        {for ( int x = 0 ; x < GRID_WIDTH ; x++ )
+            for (int y = 0; y < GRID_HEIGHT; y++)
+            {Intersection j = i[ x, y];
+                Console.Write("{0} connects to: ", j.name);
+                for (int r = 0; r < 4; r++)
+                    Console.Write("{0}, ", j.outgoing[r]);
+                Console.Write("\nconnects from: ");
+                for (int r = 0; r < 4; r++)
+                    Console.Write("{0}, ", j.incoming[r]);
+                Console.WriteLine();
+            }//end printing intersection
+        }//end print roads
 }//end simulation
