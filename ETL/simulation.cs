@@ -31,6 +31,8 @@ public class Simulation
             double r = 0.0;
                         bool hasDriven = r == 0 ? true : false;
 
+                        futureEvents.Add(new ResetStatisticsEvent(0));
+
         /*initialise intersections*/
         for (int x = 0; x < GRID_WIDTH; x++)
             for (int y = 0; y < GRID_HEIGHT; y++)
@@ -53,24 +55,20 @@ public class Simulation
             {//initialise lights
                 Intersection i = intersections[x, y];
 
-                                i.incoming[(int)direction.north].HasGreen = true;
-                i.incoming[(int)direction.south].HasGreen = true;
-                                    i.incoming[ (int)    direction.east].HasGreen = true;
-                                    i.incoming[ (int)  direction.west].HasGreen = true;
+                i.incoming[(int)direction.north].HasGreen = false;
+                                                    i.incoming[ (int)    direction.east].HasGreen = true;
+                                                    i.incoming[(int)direction.south].HasGreen = false;
+                                                    i.incoming[(int)direction.west].HasGreen = true;
 
-                //if ( false &&  debug)
-                                    //futureEvents.Add(new SwitchLightEvent(LIGHT_DURATION, i));
-                //else
-                                    futureEvents.Add(new SwitchLightEvent(rand.Next(0, 2 * LIGHT_DURATION), i));    
+                                                    int light  = rand.Next(-1 * LIGHT_DURATION, LIGHT_DURATION);
+                                                    futureEvents.Add(new SwitchLightEvent( light, i));    
+
                 for (int j = 0; j < 4 ; j++)
                                         for ( int k = 0 ; k < CARS_PER_ROAD ; k++ )
                                         futureEvents.Add(new EndOfRoadEvent(0, i.incoming[j], new Vehicle()));
                                                                                                                         }//end of connecting intersection x,y northwards and eastwards
 
-        sle = new SwitchLightEvent(0, intersections[0, 0]);
-        futureEvents.removeItems(sle);
-        Console.WriteLine("removed sle");
-
+        
                                     while ( time < MAX_TIME && !futureEvents.Empty())
                             {
                                 Console.WriteLine("num events = " + futureEvents.Size());
