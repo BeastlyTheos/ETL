@@ -38,8 +38,7 @@ public class Intersection
     {
         foreach (Road r in this.incoming)
             r.HasGreen = r.HasGreen ? false : true;
-                printLights();
-    }//end switch lights
+                    }//end switch lights
 
     public void printLights()
     {

@@ -18,9 +18,13 @@ public class Vehicle
 
 public class Ambulance : Vehicle
 {
-    private List<int> pathDirs;
+    public static int numTrips = 0;
+    public static int totalTime = 0;
 
-        public void createPath( int totalRoads)
+    public int startTime;
+        public List<int> pathDirs;
+
+            public void createPath( int totalRoads)
     {
                        this.pathDirs = new List<int>();
 
@@ -31,10 +35,18 @@ public class Ambulance : Vehicle
 
     public override int getDirection(int currentDirection)
         {
-           int  d  = pathDirs[0];
+            if (0 == pathDirs.Count)
+            {Simulation.futureEvents.Add( new GetDestinationEvent( Simulation.time, this));
+                numTrips++;
+                totalTime += Simulation.time - startTime;
+                Console.WriteLine("arrived at "+Simulation.time);
+                return -1;
+    }
+        else
+            {int  d  = pathDirs[0];
             pathDirs.RemoveAt(0);
             return d;
-            }
+            }}
 
     public int getFuturePath(int i)
     { return pathDirs[i]; }

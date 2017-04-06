@@ -7,9 +7,11 @@ public class Simulation
 {
     public static bool debug = true;
     const int TIME_SCALE = 0;
-    const int MAX_TIME = 2000;
+    const int MAX_TIME = 20000000;
+    const int MAX_TRIPS = 100;
     const int CARS_PER_ROAD = 10;
-    const int LIGHT_DURATION = 20;
+    public  const int LIGHT_DURATION = 20;
+    public const int NUM_PREEMPTIVE_GREENS = 44;
     public const int YELLOW_LIGHT_DURATION = 2;
     public const int CLEARING_TIME = 1;
     public const int ROAD_LENGTH = 20;
@@ -28,8 +30,7 @@ public class Simulation
                 Event e;
                 SwitchLightEvent sle;
             EndOfRoadEvent eore;
-            double r = 0.0;
-                        bool hasDriven = r == 0 ? true : false;
+                                    bool hasDriven;
 
                         futureEvents.Add(new ResetStatisticsEvent(0));
 
@@ -68,38 +69,34 @@ public class Simulation
                                         futureEvents.Add(new EndOfRoadEvent(0, i.incoming[j], new Vehicle()));
                                                                                                                         }//end of connecting intersection x,y northwards and eastwards
 
+        futureEvents.Add(new GetDestinationEvent(0, new Ambulance()));
         
                                     while ( time < MAX_TIME && !futureEvents.Empty())
                             {
-                                Console.WriteLine("num events = " + futureEvents.Size());
-            e = futureEvents.pop();
+                                            e = futureEvents.pop();
                         //if (debug && e.time > time ) System.Threading.Thread.Sleep( (int) ((e.time - time) * TIME_SCALE));
             time = e.time;
-            Console.Write("{0}: {1}. ", e.time, e.GetType().ToString());
-
+            
             switch (e.GetType().ToString())
             {
                 case "SwitchLightEvent":
-                    Console.WriteLine();
-                    sle = (SwitchLightEvent) e;
+                                        sle = (SwitchLightEvent) e;
                     sle.intersection.switchLights();
                     sle.intersection.block( YELLOW_LIGHT_DURATION);
                     futureEvents.Add( new SwitchLightEvent( time+LIGHT_DURATION, sle.intersection));
-                    Console.Read();
                     break;
                                     case "EndOfRoadEvent":
                                          eore = (EndOfRoadEvent)e;
                     eore.road.waitingVehicles.Add( eore.vehicle);
-                    Console.WriteLine("road is {0} clear, with {1} cars waiting, and a {2} light",  eore.road.to.isClear()? "": "not", eore.road.waitingVehicles.Size(), eore.road.HasGreen? "green": "red");
+                    //Console.WriteLine("road is {0} clear, with {1} cars waiting, and a {2} light",  eore.road.to.isClear()? "": "not", eore.road.waitingVehicles.Size(), eore.road.HasGreen? "green": "red");
                     if (eore.road.to.isClear() && eore.road.HasGreen)
-                    {
-                                                eore.road.drive();
-                    }
-                    else Console.WriteLine("just waiting at {0}", eore.road);
+                                                                    eore.road.drive();
+                    //else 
+                        //Console.WriteLine("just waiting at {0}", eore.road);
                                                                                     break;
                 case "IntersectionClearEvent":
                                                                                 IntersectionClearEvent ICE = (IntersectionClearEvent)e;
-                                                            Console.WriteLine("clearing "+ICE.intersection.name);
+                                                            //Console.WriteLine("clearing "+ICE.intersection.name);
                                                             ICE.intersection.unblock();
                                                             if (ICE.intersection.isClear())
                                                             {//cycle through incoming roads, looking for a car to drive
@@ -117,7 +114,16 @@ public class Simulation
                     //else there is another blocking event (either a drive or switch light)
                                                             break;
                 case "ResetStatisticsEvent":
-                                                            Road.numTrafficJams = Road.numSwitches = 0;
+                                                            Road.numTrafficJams = Road.numSwitches = Ambulance.totalTime = Ambulance.numTrips = 0;
+                                                            break;
+                case "GetDestinationEvent":
+                                                                                                                        GetDestinationEvent gde = (GetDestinationEvent)e;
+                                                            gde.ambulance.createPath(2);
+                    gde.ambulance.startTime = time;
+                    Road startingRoad = intersections[0,0].outgoing[ (int) direction.north];
+                                                            futureEvents.Add(new EndOfRoadEvent(time, startingRoad, gde.ambulance));
+                                                            if ( Ambulance.numTrips > MAX_TRIPS )
+                                                                futureEvents.MakeEmpty();
                                                             break;
                                                                             default:
                     throw new  System.NotImplementedException("no implementation for event "+e.GetType());
@@ -125,6 +131,7 @@ public class Simulation
         }//end while there is a future event
 
                 Console.WriteLine("There were {0} jams out of a total of {1} switches, for a rate of {2}%", Road.numTrafficJams, Road.numSwitches, (double)Road.numTrafficJams / Road.numSwitches);
+                Console.WriteLine("The ambulance took {0} trips, with an average time of {1}", Ambulance.numTrips, (double)Ambulance.totalTime / Ambulance.numTrips);
                 Console.WriteLine("done");
                     //printGrid(intersections);
         Console.Read();
