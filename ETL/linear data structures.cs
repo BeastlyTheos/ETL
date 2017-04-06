@@ -61,8 +61,7 @@ namespace LinearDataStructures
 
         public void removeItems(T i)
         {
-            Console.WriteLine("removing " + i.ToString());
-            if ( 0 !=  numItems )
+                        if ( 0 !=  numItems )
             {
                 while (first.Item.Equals(i))
                     this.Remove();
