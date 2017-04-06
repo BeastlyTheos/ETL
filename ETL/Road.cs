@@ -42,7 +42,7 @@
                   if (hasGreen && !value && !wasEmptiedThisCycle) // if is being switched to red, and the queue was never emptied this cycle
                   {
                       numTrafficJams++;
-                      System.Console.WriteLine("traffic jam #{0} for road leaving {1} from {0}", numTrafficJams, (direction)this.dir, this.to.name);
+                      //System.Console.WriteLine("traffic jam #{0} for road leaving {1} from {0}", numTrafficJams, (direction)this.dir, this.to.name);
                   }
                   else if (!hasGreen && value) //if the light is being turned green
                       if (0 == waitingVehicles.Size())
@@ -61,8 +61,8 @@
          Vehicle v = waitingVehicles.pop();
          int  d = v.getDirection( (int)  this.dir);
                   Road r = this.to.outgoing[ d];
-         System.Console.WriteLine("coming from {0}, to intersection {1}, and turning {2}, to leave {3} to {4}", 
-             (direction) ((this.dir+2) %4), this.to.name, (direction) d, (direction) r.dir, r.to.name);
+         //System.Console.WriteLine("coming from {0}, to intersection {1}, and turning {2}, to leave {3} to {4}", 
+             //(direction) ((this.dir+2) %4), this.to.name, (direction) d, (direction) r.dir, r.to.name);
          Simulation.futureEvents.Add( new EndOfRoadEvent( Simulation.time + r.length, r, v));
          this.to.block(Simulation.CLEARING_TIME);
          return true;

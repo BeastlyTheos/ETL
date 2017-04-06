@@ -13,8 +13,8 @@ public class Simulation
     public const int YELLOW_LIGHT_DURATION = 2;
     public const int CLEARING_TIME = 1;
     public const int ROAD_LENGTH = 20;
-    const uint GRID_WIDTH = 3;
-    const uint GRID_HEIGHT = 3;
+    const uint GRID_WIDTH = 2;
+    const uint GRID_HEIGHT = 2;
 
     public static int time;
     public  static Random rand = new Random(); 
@@ -58,15 +58,19 @@ public class Simulation
                                     i.incoming[ (int)    direction.east].HasGreen = true;
                                     i.incoming[ (int)  direction.west].HasGreen = true;
 
-                if ( false &&  debug)
-                                    futureEvents.Add(new SwitchLightEvent(LIGHT_DURATION, i));
-                else
+                //if ( false &&  debug)
+                                    //futureEvents.Add(new SwitchLightEvent(LIGHT_DURATION, i));
+                //else
                                     futureEvents.Add(new SwitchLightEvent(rand.Next(0, 2 * LIGHT_DURATION), i));    
                 for (int j = 0; j < 4 ; j++)
                                         for ( int k = 0 ; k < CARS_PER_ROAD ; k++ )
                                         futureEvents.Add(new EndOfRoadEvent(0, i.incoming[j], new Vehicle()));
                                                                                                                         }//end of connecting intersection x,y northwards and eastwards
-        
+
+        sle = new SwitchLightEvent(0, intersections[0, 0]);
+        futureEvents.removeItems(sle);
+        Console.WriteLine("removed sle");
+
                                     while ( time < MAX_TIME && !futureEvents.Empty())
                             {
                                 Console.WriteLine("num events = " + futureEvents.Size());
@@ -83,6 +87,7 @@ public class Simulation
                     sle.intersection.switchLights();
                     sle.intersection.block( YELLOW_LIGHT_DURATION);
                     futureEvents.Add( new SwitchLightEvent( time+LIGHT_DURATION, sle.intersection));
+                    Console.Read();
                     break;
                                     case "EndOfRoadEvent":
                                          eore = (EndOfRoadEvent)e;

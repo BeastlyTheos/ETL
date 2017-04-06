@@ -36,15 +36,7 @@ public class  EndOfRoadEvent: Event
         this.vehicle = v;
     }
 
-    /*public override void actuate()
-    {if ( this.road.to.isClear)
-    {//{this.road.to.r
-    }//end if isClear
-    }//end actuate 
-     * */
-
-    
-    public override string ToString()
+        public override string ToString()
     {
         return base.ToString() + " from " + road;
     }
@@ -57,10 +49,6 @@ class IntersectionClearEvent : Event
     public IntersectionClearEvent( int  t, Intersection i)
         : base(t)
     { this.intersection  = i; }
-
-    /*public override void actuate()
-    { i.clearIntersection(); }
-     * */
     }//end IntersectionClearEvent
 
 public class SwitchLightEvent : Event

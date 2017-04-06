@@ -61,16 +61,23 @@ namespace LinearDataStructures
 
         public void removeItems(T i)
         {
+            Console.WriteLine("removing " + i.ToString());
             if ( 0 !=  numItems )
             {
-                Node n = first;
-                while ( null != n )
+                while (first.Item.Equals(i))
+                    this.Remove();
+
+                Node last = first;
+                Node current = last.Next;
+                while ( null != current )
                 {
-                    if (i.Equals(n.Item))
-                    {
-                        n = n.Next;
+                    if ( current.Item.Equals( i) )
+                    {last.Next = current.Next;
                         numItems--;
                     }//end deleting
+
+                    last = current;
+                    current = current.Next;
                 }//end while
             }//end if not empty
                     }//end remove items
@@ -152,8 +159,7 @@ namespace LinearDataStructures
         
         public  override void Add(T item)
         {
-            System.Console.WriteLine("adding " + item.GetType().ToString());
-            Node current = first;
+                        Node current = first;
             Node previous = null;
 
             while (current != null && current.Item.CompareTo(item) > 0)
