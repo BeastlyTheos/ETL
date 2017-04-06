@@ -20,15 +20,7 @@ public class Simulation
     public  static Random rand = new Random(); 
     public static LinkedListPriorityQueue<Event> futureEvents;
 
-    public static void tMain()
-    {List<int> l = new List<int>();
-        for( int i = 0 ; i < 4 ; i ++)
-        {Console.WriteLine(l.Count);
-        l.Add(i);
-        }
-        Console.Read();
-            }//end test
-    public static void Main()
+        public static void Main()
     {
         Console.Title = "emergency";
                 Intersection[,] intersections = new Intersection[GRID_WIDTH, GRID_HEIGHT];
@@ -74,17 +66,7 @@ public class Simulation
                                         for ( int k = 0 ; k < CARS_PER_ROAD ; k++ )
                                         futureEvents.Add(new EndOfRoadEvent(0, i.incoming[j], new Vehicle()));
                                                                                                                         }//end of connecting intersection x,y northwards and eastwards
-        Ambulance a = new Ambulance();
-        a.createPath(10);
-        Console.WriteLine(a);
-        Console.WriteLine( a.getFuturePath(0));
-        Console.WriteLine(a);
-Console.WriteLine(         a.getFuturePath(1));
-        Console.WriteLine(a);
-        Console.WriteLine( a.getFuturePath(2));
-        Console.WriteLine(a);
-        Console.Read();
-        if (debug) return;
+        
                                     while ( time < MAX_TIME && !futureEvents.Empty())
                             {
                                 Console.WriteLine("num events = " + futureEvents.Size());

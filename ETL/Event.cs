@@ -70,4 +70,26 @@ public class SwitchLightEvent : Event
     public SwitchLightEvent(int time, Intersection i)
         : base(time)
     { this.intersection = i; }
+
+    public override bool Equals(object obj)
+    {        SwitchLightEvent other = obj as SwitchLightEvent;
+        if (other == null)
+            return false;
+        else
+            return this.GetType() == other.GetType() && this.intersection.name == other.intersection.name;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 }//end class SwitchLightEvent
+
+public class GetDestinationEvent : Event
+{
+    public Ambulance ambulance;
+
+    public GetDestinationEvent(int t, Ambulance a)
+        : base(t)
+    { this.ambulance = a; }
+}//end GetDestination
