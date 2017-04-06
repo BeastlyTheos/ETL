@@ -10,14 +10,14 @@ public class Simulation
 
     const int MAX_TIME = 20000000; //maximum simulated time
     const int MAX_TRIPS = 100; //max ambulance trips
-    const int CARS_PER_ROAD = 3;
+    const int CARS_PER_ROAD = 4;
     public const int LIGHT_DURATION = 20;
     public const int NUM_PREEMPTIVE_GREENS = 3;
     public const int YELLOW_LIGHT_DURATION = 2;
     public const int CLEARING_TIME = 1;
     public const int ROAD_LENGTH = 20;
     const uint GRID_WIDTH = 6;
-    const uint GRID_HEIGHT = 6;
+    const uint GRID_HEIGHT = 7;
 
     public static int time;
     public static Random rand = new Random();
