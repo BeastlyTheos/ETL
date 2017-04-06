@@ -4,7 +4,7 @@
     {
         double  r = Simulation.rand.NextDouble();
         
-        if ( 0.7 > r)
+        if ( (Simulation.debug ? 1:  0.7) > r)
             return currentDirection;
         else if (0.85 > r)
             return (currentDirection + 1) % 4; //turn right

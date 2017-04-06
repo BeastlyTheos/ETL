@@ -152,6 +152,7 @@ namespace LinearDataStructures
         
         public  override void Add(T item)
         {
+            System.Console.WriteLine("adding " + item.GetType().ToString());
             Node current = first;
             Node previous = null;
 

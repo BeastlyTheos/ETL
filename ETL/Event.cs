@@ -7,9 +7,7 @@
         this.time = time;
     }
 
-        //public abstract void actuate();
-
-        public override string ToString()
+               public override string ToString()
     {
         return this.GetType() + " at " +this.time;
     }
@@ -24,6 +22,8 @@
     }
 }//end of Event class
 
+public class ResetStatisticsEvent : Event
+{ public ResetStatisticsEvent(int t) : base(t) { } }
 
 public class  EndOfRoadEvent: Event
 {
